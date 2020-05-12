@@ -21,11 +21,22 @@ class ApiControllerTest {
 
     @Test
     public void shouldFindSimpleFile() throws Exception {
-        MockMultipartFile multipartFile = new MockMultipartFile("file", "simple.txt",
-                "text/plain", getClass().getResourceAsStream("simple.txt"));
+        MockMultipartFile multipartFile = new MockMultipartFile(
+                "file",
+                getClass().getResourceAsStream("/simple.txt"));
         this.mvc.perform(multipart("/file").file(multipartFile))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(content().string("ok"));
+    }
+
+    @Test
+    public void shouldReportInvalidHeader() throws Exception {
+        MockMultipartFile multipartFile = new MockMultipartFile(
+                "file",
+                getClass().getResourceAsStream("/invalidHeader.txt"));
+        this.mvc.perform(multipart("/file").file(multipartFile))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(content().string("Invalid header"));
     }
 
 }
