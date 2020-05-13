@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-class ApiControllerTest {
+class InternalApiControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -39,4 +39,13 @@ class ApiControllerTest {
                 .andExpect(content().string("Invalid header"));
     }
 
+    @Test
+    public void shouldProcessMultiLine() throws Exception {
+        MockMultipartFile multipartFile = new MockMultipartFile(
+                "file",
+                getClass().getResourceAsStream("/multiLine.txt"));
+        this.mvc.perform(multipart("/file").file(multipartFile))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(content().string("ok"));
+    }
 }
